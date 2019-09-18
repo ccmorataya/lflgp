@@ -9,5 +9,5 @@ function love.update()
 end
 
 function love.draw()
-  love.graphics.print('Hello love 2d', 200, 200)
+  love.graphics.print('Hello Andoid', 200, 200)
 end
