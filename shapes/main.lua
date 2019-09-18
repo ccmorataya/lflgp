@@ -1,18 +1,41 @@
-function love.load() -- loads all we need in game
-  -- set color for our shapes RGB
-  love.graphics.setColor(0, 0, 0, 255)
+-- variables
+local angle = 0
+local width = 10
+local height = 10
+local x, y = 0
 
+function love.load() -- loads all we need in game
   -- set background color RGB
   love.graphics.setBackgroundColor(225, 153, 0)
 end
 
 function love.draw() -- function to display/draw content to screen
-  -- draw circle with params(mode, x-pos, y-pos, radius, segments)
-  love.graphics.circle("fill", 100, 150, 25, 25)
+  -- debug
+  love.graphics.print("CM::angle: " .. tostring(angle), 10, 10)
+  love.graphics.print("CM::x: " .. tostring(x), 10, 30)
+  -- rotate
+  love.graphics.rotate(angle)
 
-  -- draw rectangle with params(mode, x-pos, y-pos, width, heigth)
-  love.graphics.rectangle("fill", 150, 150, 50, 50)
+  -- draw a blue rectangle
+  love.graphics.setColor(0, 0, 255, 255)
+  love.graphics.rectangle("fill", 150, 200, width, height)
+end
 
-  -- draw an arc with params(mode, x-pos, y-pos, radius, angle1, angle2)
-  love.graphics.arc("fill", 225, 150, 50, math.pi/5, math.pi/2)
+-- update
+function love.update(dt)
+  -- store the touch screen interaction
+  local touches = love.touch.getTouches()
+
+  for i, id in ipairs(touches) do
+    x, y = love.touch.getPosition(id)
+
+    -- on right press, rotate to right
+    if x > ( love.graphics.getWidth() /2 ) then
+      angle = angle + math.pi * dt
+      -- on left press, rotate to left
+    elseif x < ( love.graphics.getWidth() /2 ) then
+      angle = angle - math.pi * dt
+    end
+  end
+
 end
