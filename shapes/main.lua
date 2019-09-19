@@ -1,12 +1,12 @@
 -- variables
 local angle = 0
-local width = 10
-local height = 10
+local width = 20
+local height = 20
 local x, y = 0
 
 function love.load() -- loads all we need in game
   -- set background color RGB
-  love.graphics.setBackgroundColor(225, 153, 0)
+  love.graphics.setBackgroundColor(0, 0, 0)
 end
 
 function love.draw() -- function to display/draw content to screen
@@ -17,7 +17,7 @@ function love.draw() -- function to display/draw content to screen
   love.graphics.rotate(angle)
 
   -- draw a blue rectangle
-  love.graphics.setColor(0, 0, 255, 255)
+  love.graphics.setColor(255, 191, 0, 255)
   love.graphics.rectangle("fill", 150, 200, width, height)
 end
 
