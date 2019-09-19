@@ -1,27 +1,25 @@
 -- variables
-local angle = 0
-local width = 20
-local height = 20
 local x, y = 0
 
 function love.load() -- loads all we need in game
+  -- create character table (rectangle shape) with initial position defined in the table
+  character = {}
+  character.x = 150
+  character.y = 200
   -- set background color RGB
   love.graphics.setBackgroundColor(0, 0, 0)
+  -- paint the character
+  love.graphics.setColor(255, 191, 0, 255)
 end
 
 function love.draw() -- function to display/draw content to screen
   -- debug
-  love.graphics.print("CM::angle: " .. tostring(angle), 10, 10)
-  love.graphics.print("CM::x: " .. tostring(x), 10, 30)
-  -- rotate
-  love.graphics.rotate(angle)
+  love.graphics.print("CM::x_touch: " .. tostring(x), 10, 10)
+  love.graphics.print("CM::character_x: " .. tostring(character.x), 10, 30)
 
-  -- draw a blue rectangle
-  love.graphics.setColor(255, 191, 0, 255)
-  love.graphics.rectangle("fill", 150, 200, width, height)
+  love.graphics.rectangle("fill", character.x, character.y, 50, 50)
 end
 
--- update
 function love.update(dt)
   -- store the touch screen interaction
   local touches = love.touch.getTouches()
@@ -31,10 +29,10 @@ function love.update(dt)
 
     -- on right press, rotate to right
     if x > ( love.graphics.getWidth() /2 ) then
-      angle = angle + math.pi * dt
+      character.x = character.x + 100 * dt
       -- on left press, rotate to left
     elseif x < ( love.graphics.getWidth() /2 ) then
-      angle = angle - math.pi * dt
+      character.x = character.x - 100 * dt
     end
   end
 
