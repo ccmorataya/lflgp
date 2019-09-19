@@ -1,6 +1,6 @@
 -- variables
 local x, y = 0
-MOVEMENT = 300
+MOVEMENT = 350
 
 function love.load() -- loads all we need in game
   -- create character table (rectangle shape) with initial position defined in the table
