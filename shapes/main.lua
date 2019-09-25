@@ -1,46 +1,23 @@
--- variables
-local x, y = 0
-MOVEMENT = 350
+local Quad = love.graphics.newQuad
 
-function love.load() -- loads all we need in game
-  -- create character table (rectangle shape) with initial position defined in the table
-  character = {}
-  character.x = 150
-  character.y = 200
-  -- set background color RGB
-  love.graphics.setBackgroundColor(0, 0, 0)
-  -- paint the character
-  love.graphics.setColor(255, 191, 0, 255)
-end
-
-function love.draw() -- function to display/draw content to screen
-  -- debug
-  love.graphics.print("CM::x_touch: " .. tostring(x), 10, 10)
-  love.graphics.print("CM::y_touch: " .. tostring(y), 10, 30)
-  love.graphics.print("CM::character_x: " .. tostring(character.x), 10, 50)
-
-  love.graphics.rectangle("fill", character.x, character.y, 50, 50)
-end
-
-function love.update(dt)
-  -- store the touch screen interaction
-  local touches = love.touch.getTouches()
-  local oneThree = love.graphics.getWidth() / 3
-
-  for i, id in ipairs(touches) do
-    x, y = love.touch.getPosition(id)
-
-    -- on right press, rotate to right
-    if x >= ( oneThree * 2 ) and x < love.graphics.getWidth() and y > love.graphics.getHeight() / 2 then
-      character.x = character.x + MOVEMENT * dt
-      -- on left press, rotate to left
-    elseif x < oneThree and y > love.graphics.getHeight() / 2 then
-      character.x = character.x - MOVEMENT * dt
-    elseif x > oneThree and x < oneThree * 2 and y < love.graphics.getHeight() / 2 then
-      character.y = character.y - MOVEMENT * dt
-    elseif x > oneThree and x < oneThree * 2 and y > love.graphics.getHeight() / 2 then
-      character.y = character.y + MOVEMENT * dt
-    end
+function love.load()
+  sprite = love.graphics.newImage("sprite.png")
+  quads = {}
+  quads["right"] = {}
+  for index=1,8 do
+    quads["right"][index] = Quad( (index-1)*32, 0, 32, 32, 256, 32 );
   end
 
+end
+
+function love.draw()
+  -- CM:: replace the deprecated flip function drawing in the x axis with the params:
+  --      sprite = the sprite obj
+  --      quad = the desired quad
+  --      x = the sprite x position + sprite width size
+  --      y = the sprite y position
+  --      radians = the sprite radian value to rotate
+  --      xs = the sprite x scale factor in negative value
+  --      ys = the sprite y scale factor
+  love.graphics.draw(sprite, quads["right"][1], 50+32, 50, 0, -1, 1)
 end
