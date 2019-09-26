@@ -3,11 +3,10 @@ keyValue = ""
 
 function love.load()
   love.graphics.setColor(255, 191, 0)
-  love.keyboard.setTextInput(true)
   character = {}
   character.player = love.graphics.newImage("sprite.png")
   character.x = 50
-  character.y = 50
+  character.y = 60
   direction = "right"
   iteration = 1
 
@@ -17,8 +16,10 @@ function love.load()
   timer = 0.1
   quads = {}
   quads["right"] = {}
+  quads["left"] = {}
   for index=1,8 do
     quads["right"][index] = Quad( (index-1)*32, 0, 32, 32, 256, 32 );
+    quads["left"][index] = Quad( (index-1)*32, 0, 32, 32, 256, 32 );
   end
 end
 
@@ -26,47 +27,45 @@ function love.update(dt)
   if idle == false then
     timer = timer + dt
     if timer > 0.2 then
+      local touches = love.touch.getTouches()
+
+      for i, id in ipairs(touches) do
+        x, y = love.touch.getPosition(id)
+          if x <= love.graphics.getWidth() / 2 then
+              character.x = character.x - 5
+          else
+              character.x = character.x + 5
+          end
+      end
+
       timer = 0.1
       iteration = iteration + 1
-      -- CM:: replace this snippet with touch validations
-      if love.keyboard.isDown("right") then
-        keyValue = 'R'
-        character.x = character.x + 5
-      end
-      if love.keyboard.isDown("left") then
-        keyValue = 'L'
-        character.x = character.x - 5
-      end
       if iteration > max then
         iteration = 1
       end
-      -- CM:: end of replace
     end
   end
 end
 
--- CM:: replace this snippet with touch validations
-function love.keypressed(key)
-  keyValue = key
-  if quads[key] then
-    direction = key
-    idle = false
+function love.touchpressed(id, x, y, dx, dy, pressure)
+  idle = false
+  if x <= love.graphics.getWidth() / 2 then
+    direction = 'left'
+  elseif x > love.graphics.getWidth() / 2 then
+    direction = 'right'
   end
 end
 
--- CM:: replace this snippet with touch validations
-function love.keyreleased(key)
-  if quads[key] and direction == key then
-    idle = true
-    iteration = 1
-    direction = "right"
-  end
+function love.touchreleased(id, x, y, dx, dy, pressure)
+  idle = true
+  iteration = 1
+  direction = 'right'
 end
 
 function love.draw()
-  love.graphics.print("CM::keyValue: " .. keyValue)
-  love.graphics.print("CM::idleValue: " .. tostring(idle), 0, 100)
-  love.graphics.draw(character.player, quads[direction][iteration], character.x, character.y)
+  love.graphics.print("CM::idleValue: " .. tostring(idle))
+  love.graphics.print("CM::x_value: " .. tostring(x), 0, 20)
+  love.graphics.draw(character.player, quads[direction][iteration], (direction == 'right' and character.x or character.x+32), character.y, 0, (direction == 'right' and 1 or -1), 1)
   -- CM:: replace the deprecated flip function drawing in the x axis with the params:
   --      sprite = the sprite obj
   --      quad = the desired quad
