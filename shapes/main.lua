@@ -1,10 +1,12 @@
 local Quad = love.graphics.newQuad
+local playerData = love.image.newImageData("sprite.png")
 keyValue = ""
 
 function love.load()
+  playerData:mapPixel(removeMagenta)
   love.graphics.setColor(255, 191, 0)
   character = {}
-  character.player = love.graphics.newImage("sprite.png")
+  character.player = love.graphics.newImage(playerData)
   character.x = 50
   character.y = 60
   direction = "right"
@@ -75,4 +77,11 @@ function love.draw()
   --      xs = the sprite x scale factor in negative value
   --      ys = the sprite y scale factor
   -- love.graphics.draw(sprite, quads["right"][1], 50+32, 50, 0, -1, 1)
+end
+
+function removeMagenta(x, y, r, g, b, a)
+  if r == 1 and g == 0 and b == 1 then
+    a = 0
+  end
+  return r, g, b, a
 end
